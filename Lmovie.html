@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lmovie</title>
+    <style></style>
+
+    <link rel="stylesheet" href="CSS/globalVar.css">
+    <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/naviBar.css">
+
+    <script src="JS/Main.js"></script>
+    <script src="JS/Data.js"></script>
+</head>
+<body>
+    <header class="top-bar">
+        <div class="top-panel">
+            <div class="search">
+                <div class="search-container">
+                    <label for="searchInput" class="search-icon bg-util" title="搜索"></label>
+                    <input type="text" id="searchInput" placeholder="输入关键词搜索...">
+                </div>
+                <div class="search-out"></div>
+            </div>
+            <div class="console">
+                <div class="theme-switch-wrapper">
+                    <div class="sun-icon bg-util"></div>
+                    <label class="theme-switch" title="切换主题" aria-label="切换深色和浅色主题">
+                        <input type="checkbox" class="hidden" id="theme-checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <div class="darkTheme-container">
+                        <div class="moon-icon bg-util"></div>
+                        <div class="star-icon bg-util"></div>
+                    </div>
+                </div>
+                <button class="setting-btn bg-util" id="settingBtn" type="button" title="设置" aria-label="设置按钮"></button>
+            </div> 
+        </div>
+        <nav class="nav-bar">
+            <h1>Lmovie</h1>
+            <div class="nav-container">
+               <ul>
+                    <li id="homeBtn">首页</li>
+                    <li id="movieBtn">电影</li>
+                    <li id="tvDrama">电视剧</li>
+                    <li id="animatBtn">动漫</li>
+                    <li id="rankBtn">排行</li>
+                </ul> 
+                <div class="nav-indicator"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="home-page" id="homePage">
+            <!-- 轮播图 -->
+            <div class="carousel">
+                <div class="carousel-inner">
+                    <!-- 轮播项将通过JavaScript动态添加 -->
+                </div>
+                <button class="carousel-control prev" type="button">&lt;</button>
+                <button class="carousel-control next" type="button">&gt;</button>
+                <div class="carousel-indicators">
+                    <!-- 指示器将通过JavaScript动态添加 -->
+                </div>
+            </div>
+            <div class="recent-hot">
+                <h3>近期热门</h3>
+                <div class="recent-container">
+                    <div class="card" data-movie-id="tt14364480">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Wake Up Dead Man.webp" alt="" loading="lazy"> 
+                                <div class="brief-info">
+                                    <div class="score">
+                                        <span class="douban">7.6/10</span>
+                                        <span class="imdb">7.5/10</span>
+                                    </div>
+                                    <span>剧情 喜剧/2025</span>
+                                </div>
+                            </div>
+                        <h4>利刃出鞘3</h4>
+                    </div> 
+                    <div class="card" data-movie-id="tt32907482">
+                        <div class="poster">
+                            <img src="Image/poster/movie/The Sun Rises on Us All.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">7.1/10</span>
+                                    <span class="imdb">6.4/10</span>
+                                </div>
+                                <span>剧情/2025</span>
+                            </div>
+                        </div>
+                        <h4>日掛中天</h4>
+                    </div>
+                    <div class="card" data-movie-id="tt32810496">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Diamanti.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">7.4/10</span>
+                                    <span class="imdb">6.7/10</span>
+                                </div>
+                                <span>剧情/喜剧/2024</span>
+                            </div>
+                        </div>
+                        <h4>钻石般的她</h4>
+                    </div>
+                    <div class="card" data-movie-id="tt22237964">
+                        <div class="poster">
+                            <img src="Image/poster/movie/La misteriosa mirada del flamenco.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">7.4/10</span>
+                                    <span class="imdb">6.7/10</span>
+                                </div>
+                                <span>剧情/同性/2025</span>
+                            </div>
+                        </div>
+                        <h4>弗拉明戈的神秘眼神</h4>
+                    </div>
+                    <div class="card" data-movie-id="tt12300742">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Bugonia.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">7.0/10</span>
+                                    <span class="imdb">7.5/10</span>
+                                </div>
+                                <span>喜剧/科幻/2025</span>
+                            </div>
+                        </div>
+                        <h4>拯救地球</h4>
+                    </div>
+                    <div class="card" data-movie-id="tt1527793">
+                        <div class="poster">
+                            <img src="Image/poster/movie/No Other Choice.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">7.3/10</span>
+                                    <span class="imdb">7.6/10</span>
+                                </div>
+                                <span>惊悚/犯罪/2025</span>
+                            </div>
+                        </div>
+                        <h4>无可奈何</h4>
+                    </div> 
+                </div>
+                <div class="next-group">
+                    <button class="recent-prev">&lt;</button>
+                    <button class="recent-next">&gt;</button>
+                </div>
+            </div>
+            <div class="recent-new">
+                <h3>近期上新</h3>
+                <div class="recent-container">
+                    <div class="card" data-movie-id="tt33014233">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Gezhi Town.webp" alt="" loading="lazy"> 
+                                <div class="brief-info">
+                                    <div class="score">
+                                        <span class="douban">6.9/10</span>
+                                        <span class="imdb">8.6/10</span>
+                                    </div>
+                                    <span>剧情/战争/2025</span>
+                                </div>
+                            </div>
+                        <h4>得闲谨制</h4>
+                    </div> 
+                    <div class="card" data-movie-id="tt2007993">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Seediq Bale The Rainbow Warriors.webp" alt="" loading="lazy"> 
+                                <div class="brief-info">
+                                    <div class="score">
+                                        <span class="douban">8.9/10</span>
+                                        <span class="imdb">7.5/10</span>
+                                    </div>
+                                    <span>剧情/历史/2011</span>
+                                </div>
+                            </div>
+                        <h4>赛德克·巴莱(上) 賽德克·巴萊(上)太陽旗</h4>
+                    </div> 
+                    <div class="card" data-movie-id="tt32486306">
+                        <div class="poster">
+                            <img src="Image/poster/movie/The Lost Daughter.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">N/A</span>
+                                    <span class="imdb">N/A</span>
+                                </div>
+                                <span>剧情 / 2024</span>
+                            </div>
+                        </div>
+                        <h4>岁岁平安</h4>
+                    </div> 
+                    <div class="card" data-movie-id="tt26443597">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Zootopia 2.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">8.4/10</span>
+                                    <span class="imdb">7.7/10</span>
+                                </div>
+                                <span>喜剧/悬疑/2025</span>
+                            </div>
+                        </div>
+                        <h4>疯狂动物城2</h4>
+                    </div>  
+                    <div class="card" data-movie-id="tt0051201">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Witness for the Prosecution.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">9.6/10</span>
+                                    <span class="imdb">8.4/10</span>
+                                </div>
+                                <span>悬疑/惊悚/1957</span>
+                            </div>
+                        </div>
+                        <h4>控方证人</h4>
+                    </div>  
+                    <div class="card" data-movie-id="tt4712810">
+                        <div class="poster">
+                            <img src="Image/poster/movie/Now You See Me Now You Dont.webp" alt="" loading="lazy"> 
+                            <div class="brief-info">
+                                <div class="score">
+                                    <span class="douban">5.8/10</span>
+                                    <span class="imdb">6.2/10</span>
+                                </div>
+                                <span>动作/犯罪/2025</span>
+                            </div>
+                        </div>
+                        <h4>惊天魔盗团3</h4>
+                    </div>    
+                </div>
+                <div class="next-group">
+                    <button class="recent-prev">&lt;</button>
+                    <button class="recent-next">&gt;</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="movie-page" id="moviePage">
+            <h2>全部电影</h2>
+            <div class="card-container">
+                <!-- 通过JS动态加载 -->
+            </div>
+            <button class="load-more bg-util" type="button" title="点击加载更多" aria-label="加载更多"></button>
+        </section>
+
+        <section class="tvDrama-page" id="tvDramaPage">
+            <h2>全部电视剧</h2>
+            <div class="card-container">
+                <!-- 通过JS动态加载 -->
+            </div>
+            <button class="load-more bg-util" type="button" title="点击加载更多" aria-label="加载更多"></button>
+        </section>
+        
+        <section class="animat-page" id="animatPage">
+            <h2>全部动漫</h2>
+            <div class="card-container">
+                <!-- 通过JS动态加载 -->
+            </div>
+            <button class="load-more bg-util" type="button" title="点击加载更多" aria-label="加载更多"></button>
+        </section>
+        
+        <section class="rank-page" id="rankPage">
+            <div class="top-3">
+                <div class="rank-container">
+                    <div class="signboard no1">
+                        <div class="rank-poster bg-util" style="background-image: url('Image/poster/movie/The Shawshank Redemption.webp');"></div>
+                        <h3>肖申克的救赎</h3>
+                    </div>    
+                    <div class="signboard no2">
+                        <div class="rank-poster bg-util" style="background-image: url('Image/poster/movie/Farewell My Concubine.webp');"></div>
+                        <h3>霸王别姬</h3>
+                    </div>
+                    <div class="signboard no3">
+                        <div class="rank-poster bg-util" style="background-image: url('Image/poster/movie/Titanic.webp');"></div>
+                        <h3>泰坦尼克号</h3>
+                    </div>
+                </div>
+            </div>
+            <h2>TOP 10</h2>
+            <div class="banner-container">   
+                <div class="banner" data-movie-id="tt0111161">
+                    <div class="poster">
+                        <img src="Image/poster/movie/The Shawshank Redemption.webp" alt="" loading="lazy">
+                    </div>
+                    <div class="brief-info">
+                        <h3>肖申克的救赎 | The Shawshank Redemption</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 犯罪</li>
+                            <li><strong>语言: &nbsp;</strong>英语</li>
+                            <li><strong>片长: &nbsp;</strong>142分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.7/10</span>
+                            <span class="imdb">9.3/10</span>
+                        </div>
+                        <p>——希望与自由终将凿穿绝望的高墙</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>  
+                <div class="banner" data-movie-id="tt0106332">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Farewell My Concubine.webp" alt="" loading="lazy">
+                    </div>
+                    <div class="brief-info">
+                        <h3>霸王别姬 | Farewell My Concubine</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 爱情 / 同性</li>
+                            <li><strong>语言: &nbsp;</strong>汉语普通话</li>
+                            <li><strong>片长: &nbsp;</strong>171分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.6/10</span>
+                            <span class="imdb">8.1/10</span>
+                        </div>
+                        <p>——人生如戏，不疯魔，不成活。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div> 
+                <div class="banner" data-movie-id="tt0120338">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Titanic.webp" alt="" loading="lazy">
+                    </div>
+                    <div class="brief-info">
+                        <h3>泰坦尼克号 | Titanic</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 爱情 / 灾难</li>
+                            <li><strong>语言: &nbsp;</strong>英语 / 意大利语 / 德语 / 俄语</li>
+                            <li><strong>片长: &nbsp;</strong>194分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.5/10</span>
+                            <span class="imdb">7.9/10</span>
+                        </div>
+                        <p>——爱是超越生死的永恒承诺。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>    
+                <div class="banner" data-movie-id="tt0109830">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Forrest Gump.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>阿甘正传 | Forrest Gump</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 爱情</li>
+                            <li><strong>语言: &nbsp;</strong>英语</li>
+                            <li><strong>片长: &nbsp;</strong>142分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.5/10</span>
+                            <span class="imdb">8.8/10</span>
+                        </div>
+                        <p>——纯粹的心，也能跑出最绚烂的人生。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>   
+                <div class="banner" data-movie-id="tt0245429">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Spirited Away.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>千与千寻 | 千と千尋の神隠し</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 动画 / 奇幻</li>
+                            <li><strong>语言: &nbsp;</strong>日语</li>
+                            <li><strong>片长: &nbsp;</strong>125分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.4/10</span>
+                            <span class="imdb">8.6/10</span>
+                        </div>
+                        <p>——在成长中找回初心，才能不被世界改变。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>   
+                <div class="banner" data-movie-id="tt0118799">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Life Is Beautifu.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>美丽人生 | La vita è bella</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 喜剧 / 爱情</li>
+                            <li><strong>语言: &nbsp;</strong>意大利语 / 德语 / 英语</li>
+                            <li><strong>时长: &nbsp;</strong>116分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.5/10</span>
+                            <span class="imdb">8.6/10</span>
+                        </div>
+                        <p>——用爱与幽默守护最后的童话。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>   
+                <div class="banner" data-movie-id="tt0816692">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Interstellar.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>星际穿越 | Interstellar</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 科幻 / 冒险</li>
+                            <li><strong>语言: &nbsp;</strong>英语</li>
+                            <li><strong>片长: &nbsp;</strong>169分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.7/10</span>
+                            <span class="imdb">9.3/10</span>
+                        </div>
+                        <p>——爱是穿越时空的唯一引力。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>    
+                <div class="banner" data-movie-id="tt0110413">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Leon.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>这个杀手不太冷 | Léon</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 动作 / 犯罪</li>
+                            <li><strong>语言: &nbsp;</strong>英语 / 意大利语 / 法语</li>
+                            <li><strong>片长: &nbsp;</strong>133分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.4/10</span>
+                            <span class="imdb">8.5/10</span>
+                        </div>
+                        <p>——一颗冰冷的杀手心，因温情而融化。</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>    
+                <div class="banner" data-movie-id="tt1375666">
+                    <div class="poster">
+                        <img src="Image/poster/movie/Inception.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>盗梦空间 | Inception</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 科幻 / 悬疑 / 冒险</li>
+                            <li><strong>语言: &nbsp;</strong>英语 / 日语 / 法语</li>
+                            <li><strong>片长: &nbsp;</strong>148分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.4/10</span>
+                            <span class="imdb">8.8/10</span>
+                        </div>
+                        <p>——现实与梦境之间，谁是真正的造物主？</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div>    
+                <div class="banner" data-movie-id="tt0120382">
+                    <div class="poster">
+                        <img src="Image/poster/movie/The Truman Show.webp" alt="">
+                    </div>
+                    <div class="brief-info">
+                        <h3>楚门的世界 | The Truman Show</h3>
+                        <ul>
+                            <li><strong>类型: &nbsp;</strong>剧情 / 科幻</li>
+                            <li><strong>语言: &nbsp;</strong>英语</li>
+                            <li><strong>片长: &nbsp;</strong>103分钟</li>
+                        </ul>
+                        <div class="score">
+                            <span class="douban">9.7/10</span>
+                            <span class="imdb">9.3/10</span>
+                        </div>
+                        <p>——当发现自己活在虚假的世界，你有勇气推开那扇门吗？</p>
+                    </div>
+                    <button class="detail-btn" type="button">查看详情</button>
+                </div> 
+            </div>
+            <a href="https://movie.douban.com/top250" class="rank-data-from" target="_blank">排行数据来源于豆瓣Top250榜单</a>
+        </section>
+    </main>
+
+    <div class="modal" id="movieModal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModal" type="button">&times;</button>
+            <div class="detail-movie">
+                <div class="detail-poster">
+                    <img id="detailPoster" src="" alt="" loading="lazy">
+                </div>
+                <div class="detail-content">
+                    <h3 class="movie-name" id="movieName">
+                        <span class="title-zh"></span>
+                        <span class="seperator">|</span>
+                        <span class="title-intl"></span>
+                        <span class="movie-year"></span>
+                    </h3>
+                    <ul class="movie-info" id="movieInfo">
+                        <li data-key="director"><strong>导演: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="writers"><strong>编剧: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="actors"><strong>主演: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="genres"><strong>类型: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="country"><strong>制片国家 / 地区: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="language"><strong>语言: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="release"><strong>上映日期: &nbsp;</strong><span class="value"></span></li>
+                        <li data-key="duration"><strong>片长: &nbsp;</strong><span class="value"></span></li>
+                    </ul>
+                    <div class="movie-score" id="movieScore">
+                        <a href="" class="douban" target="_blank">
+                            <span class="score-label">豆瓣评分: &nbsp;</span>
+                            <span class="score-value"></span>
+                        </a>
+                        <a href="" class="imdb" target="_blank">
+                            <span class="score-label">IMDb评分: &nbsp;</span>
+                            <span class="score-value"></span>
+                        </a>
+                    </div>
+                    <div class="movie-intro">
+                        <h4>剧情简介</h4>
+                        <p id="movieIntro"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <aside class="side-widget">
+        <button class="back-to-top" type="button" id="backToTop" title="返回顶部" aria-label="返回顶部控件">↑</button>
+        <button class="side-setting" id="sideSettingBtn" type="button">
+            <img src="Image/naviBar/setting.svg" alt="setting" title="设置" aria-label="设置">
+        </button>
+    </aside>
+
+    <footer class="bottom-bar">
+        <div class="additional" id="additional">
+            <div class="data-info">
+                <span>数据更新日期: 2025-12-17</span>
+                <div class="data-from">
+                    <span>所有影视数据均来源</span>
+                    <a href="https://www.douban.com" target="_blank" title="豆瓣"><img src="Image/naviBar/douban.svg" alt="" class="douban-link"></a>
+                    <a href="https://www.imdb.com" target="_blank" title="IMDB"><img src="Image/naviBar/imdb.svg" alt="" class="imdb-link"></a>
+                </div>
+            </div>
+            <div class="contact-us">
+                <span>该项目已开源至</span>
+                <a href="https://github.com/phosicX/Lmovie/" target="_blank" title="github"><img src="Image/naviBar/github.svg" alt="" class="github-link"></a>
+            </div>
+        </div>
+        <div class="lang">
+            <div class="lang-icon bg-util"></div>
+            <span>中文 (中国)</span>
+        </div>
+        <span class="copyright">&copy; 2025 phosicX/Group-5</span>
+    </footer> 
+</body>
+</html>

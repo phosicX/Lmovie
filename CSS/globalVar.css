@@ -1,0 +1,139 @@
+:root {
+    /* 过度动画速率 */
+    --transition-fast: 0.1s ease;
+    --transition: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* 关键帧动画速率 */
+    --animation-fast: 0.5s;
+    --animation: 1s;
+    --animation-slow: 2s;
+
+    /* 阴影尺寸 */
+    --shadow-xs: 0 1px 10px;
+    --shadow-sm: 0 3px 10px;
+    --shadow-md: 0 3px 25px;
+    --shadow-lg: 0 6px 25px;
+    --shadow-xl: 0 10px 25px;
+    --shadow-hover: 0 0 50px;
+
+    --indicator-color: #227af5;
+}
+
+:root {
+    --bg-color: #f1f1f1;
+    --text-color: #1a1a1a;
+    --modal-overlay: rgba(250, 250, 250, 0.75);
+    --nav-bg: rgba(240, 240, 240, 0.75);
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --border-color: #2a2a2a;
+    --btn-color: #dfdfdf;
+    --btn-border: #cfcfcf;
+    --banner-bg: rgba(220, 220, 220, 0.5);
+    --banner-border: #c1c1c1;
+
+    /* 主题控件 */
+    --toggle-bg: #d4d4d4;
+    --toggle-circle: white;
+
+    /* 滤镜 */
+    --svg-filter: none;
+    --svg-invert: invert(0%);
+}
+
+[data-theme = 'dark'] {
+    --bg-color: #1a1a1a;
+    --text-color: #f1f1f1;
+    --modal-overlay: rgba(20, 20, 20, 0.75);
+    --nav-bg: rgba(30, 30, 30, 0.75);
+    --shadow-color: rgba(255, 255, 255, 0.2);
+    --border-color: #e1e1e1;
+    --btn-color: #212121;
+    --btn-border: #3f3f3f;
+    --banner-bg: rgba(50, 50, 50, 0.5);
+    --banner-border: #313131;
+    
+    /* 主题控件 */
+    --toggle-bg: #3c3c3c;
+    --toggle-circle: black;
+
+    /* 滤镜 */
+    --svg-filter: invert(1) hue-rotate(180deg);
+    --svg-invert: invert(100%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* scrollbar-width: none; */
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+        
+body {
+    background: var(--bg-color);
+    color: var(--text-color);               /* 所有用此属性的文字不需要设置transition, color可继承*/
+    font-family: '微软雅黑'; 
+    transition: var(--transition);
+}
+
+button {
+    background: none;
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+h1 { font-size: 54px;}
+h2 { font-size: 30px;}
+h3 { font-size: 24px;}
+h4 { font-size: 18px;}
+
+img { display: block;}
+
+label { cursor: pointer;}
+
+p, li { 
+    list-style: none;
+    font-family: '方正书宋';
+}
+
+.bg-util {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.hidden { display: none !important;}
+
+.douban::before { background: url('../Image/main/douban.svg') no-repeat center;}
+
+.imdb::before { background: url('../Image/main/imdb.svg') no-repeat center;}
+
+/* svg-filter */
+.douban-link, .github-link, .imdb-link, .lang-icon, .load-more, .moon-icon, .nav-bar li::before,
+ .nav-side, .search-icon, .setting-btn, .side-setting img, .star-icon, .sun-icon {
+    filter: var(--svg-filter);
+    transition: var(--transition);
+}
+
+/* btn-hover */
+.detail-btn:hover, .modal-close-btn:hover, .modal .douban:hover, .modal .imdb:hover, .nav-bar li:hover,
+ .recent-prev:hover, .recent-next:hover, .search-result-item:hover {
+    box-shadow: inset var(--shadow-hover) var(--shadow-color), 0 0 0 var(--bg-color);
+}
+
+/* btn-active */
+.detail-btn:active, .modal-close-btn:active, .modal .douban:active, .modal .imdb:active,
+ .recent-prev:active, .recent-next:active {
+    border-color: var(--border-color);
+}
