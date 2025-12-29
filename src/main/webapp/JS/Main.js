@@ -213,25 +213,25 @@ document.addEventListener('DOMContentLoaded', function() {
             };
         },
 
-        onPageChange(pageKey) {
+        async onPageChange(pageKey) {
             const pageMap = {
                 home: null,
                 movie: 'movie',
-                tvDrama: 'tvDrama',
-                animat: 'animat',
+                tvDrama: 'tv_drama',
+                animat: 'anime',    
                 rank: null
             };
 
             this.currentPageType = pageMap[pageKey];
 
             if (this.currentPageType) {
-                this.loadInitialContent(this.currentPageType);
+                await this.loadInitialContent(this.currentPageType);
             }
 
             this.updateLoadMoreButton();
         },
 
-        loadInitialContent(pageType) {
+        async loadInitialContent(pageType) {
             const container = this.getContainer(pageType);
             if (!container) return;
 
@@ -241,14 +241,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 mediaDataManager.resetPage(pageType);
             }
 
-            this.loadMore('initial');
+            await this.loadMore('initial');
         },
 
-        loadMore(loadType = 'more') {
+        async loadMore(loadType = 'more') {
             if (!this.currentPageType) return;
 
             if (typeof mediaDataManager !== 'undefined') {
-                const items = mediaDataManager.loadMoreItems(this.currentPageType, loadType);
+                const items = await mediaDataManager.loadMoreItems(this.currentPageType, loadType);
                 this.renderItems(items, this.currentPageType);
                 this.updateLoadMoreButton();
             }
@@ -304,8 +304,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const title = document.createElement('h4');
             title.textContent = item.titles?.zh || '未知标题';
 
-            poster.addEventListener('click', (e) => {
-                movieModalModule?.handleMovieDetailTrigger?.(e, item.id, 'poster');
+            poster.addEventListener('click', async (e) => {
+                await movieModalModule.handleMovieDetailTrigger(e, item.id, 'poster');
             });
 
             card.append(poster, title);
@@ -336,8 +336,8 @@ document.addEventListener('DOMContentLoaded', function() {
         getContainer(pageType) {
             switch (pageType) {
                 case 'movie': return this.elements.movieContainer;
-                case 'tvDrama': return this.elements.tvDramaContainer;
-                case 'animat': return this.elements.animatContainer;
+                case 'tv_drama': return this.elements.tvDramaContainer;
+                case 'anime': return this.elements.animatContainer;
                 default: return null;
             }
         },
@@ -362,11 +362,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 电影详情模态框模块
     const movieModalModule = {
-        currentMovieDatabase: null,
-
-        lastTriggerPoster: null,
-        lastPosterRect: null,
-
         elements: {
             modal: null,
             modalContent: null,
@@ -378,9 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
             movieIntro: null
         },
 
-        init(movieDatabase) {
-            this.currentMovieDatabase = movieDatabase;
-
+        init() {
             this.elements.modal = document.querySelector('#movieModal');
             if (!this.elements.modal) return;
 
@@ -437,10 +430,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         },
 
-        handleMovieDetailTrigger(e, movieId, triggerType = 'poster') {
-            if (!this.currentMovieDatabase?.[movieId]) return;
+        async handleMovieDetailTrigger(e, movieId, triggerType = 'poster') {
+            const movie = await this.fetchMovieDetail(movieId);
+            if (!movie) return;
 
-            this.updateMovieDetail(this.currentMovieDatabase[movieId]);
+            this.updateMovieDetail(movie);
 
             if (triggerType === 'poster') {
                 this.animateModalOpenFromPoster(e);
@@ -449,9 +443,54 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
 
-        showMovieDetail(movieId) {
-            if (!this.currentMovieDatabase?.[movieId]) return;
-            this.updateMovieDetail(this.currentMovieDatabase[movieId]);
+        async fetchMovieDetail(movieId) {
+            try {
+                const response = await fetch(`/api/movies?action=detail&id=${movieId}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const movie = await response.json();
+                
+                // 转换为前端需要的格式
+                return {
+                    id: movie.id,
+                    poster: movie.posterUrl,
+                    titles: {
+                        zh: movie.titleZh,
+                        intl: movie.titleIntl
+                    },
+                    year: movie.year,
+                    info: {
+                        director: movie.director,
+                        writers: movie.writers,
+                        actors: movie.actors,
+                        genres: movie.genres,
+                        country: movie.country,
+                        language: movie.language,
+                        release: movie.releaseDate,
+                        duration: movie.duration
+                    },
+                    scores: {
+                        douban: { 
+                            value: movie.doubanScore,
+                            url: movie.doubanUrl
+                        },
+                        imdb: { 
+                            value: movie.imdbScore,
+                            url: movie.imdbUrl
+                        }
+                    },
+                    intro: movie.intro
+                };
+            } catch (error) {
+                console.error('获取电影详情失败:', error);
+                return null;
+            }
+        },
+
+        async showMovieDetail(movieId) {
+            const movie = await this.fetchMovieDetail(movieId);
+            if (!movie) return;
+            
+            this.updateMovieDetail(movie);
             this.showModal();
         },
 
@@ -751,10 +790,8 @@ document.addEventListener('DOMContentLoaded', function() {
         searchDelay: 300,
         minSearchLength: 1,
         maxResults: 8,
-        combinedDatabase: null,
 
-        init(combinedDatabase) {
-            this.combinedDatabase = combinedDatabase;
+        init() {
             this.elements.searchInput = utils.$('#searchInput');
             this.elements.searchOut = utils.$('.search-out');
             this.elements.searchLabel = utils.$('label[for="searchInput"] img');
@@ -834,13 +871,13 @@ document.addEventListener('DOMContentLoaded', function() {
             }, this.searchDelay);
         },
 
-        performSearch(searchTerm) {
+        async performSearch(searchTerm) {
             if (!searchTerm || searchTerm.length < this.minSearchLength) {
                 this.showNoResults();
                 return;
             }
             
-            const results = this.searchByName(searchTerm);
+            const results = await this.searchByName(searchTerm);
             
             if (results.length === 0) {
                 this.showNoResults();
@@ -849,77 +886,50 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
 
-        searchByName(searchTerm) {
-            if (!this.combinedDatabase || !searchTerm) return [];
-
-            const lowerSearchTerm = searchTerm.toLowerCase();
-            const results = [];
-
-            // 遍历所有电影/动漫数据
-            Object.keys(this.combinedDatabase).forEach(movieId => {
-                const movie = this.combinedDatabase[movieId];
-                let matchScore = 0;
-
-                if (movie.titles?.zh) {
-                    const lowerZh = movie.titles.zh.toLowerCase();
-                    
-                    if (lowerZh === lowerSearchTerm) {
-                        matchScore = 100;
-                    }
-                    else if (lowerZh.includes(lowerSearchTerm)) {
-                        matchScore = 80 - lowerZh.indexOf(lowerSearchTerm);
-                    }
-                    else if (searchTerm.length > 1) {
-                        const allCharsMatch = Array.from(lowerSearchTerm).every(char => 
-                            lowerZh.includes(char)
-                        );
-                        if (allCharsMatch) {
-                            matchScore = 60;
-                        }
-                    }
-                }
-
-                if (matchScore < 60 && movie.titles?.intl) {
-                    const lowerIntl = movie.titles.intl.toLowerCase();
-                    
-                    if (lowerIntl === lowerSearchTerm) {
-                        matchScore = 95;
-                    }
-                    else if (lowerIntl.includes(lowerSearchTerm)) {
-                        matchScore = Math.max(matchScore, 75 - lowerIntl.indexOf(lowerSearchTerm));
-                    }
-                    else if (searchTerm.length > 2) {
-                        const words = lowerIntl.split(/[\s\-.,;:]+/);
-                        const searchWords = lowerSearchTerm.split(/[\s\-.,;:]+/);
-                        
-                        let wordMatches = 0;
-                        searchWords.forEach(searchWord => {
-                            if (searchWord.length < 2) return;
-                            words.forEach(word => {
-                                if (word.includes(searchWord)) {
-                                    wordMatches++;
-                                }
-                            });
-                        });
-                        
-                        if (wordMatches > 0) {
-                            matchScore = Math.max(matchScore, 55 + (wordMatches * 10));
-                        }
-                    }
-                }
-
-                if (matchScore > 0) {
-                    results.push({
-                        id: movieId,
-                        movie: movie,
-                        score: matchScore
-                    });
-                }
-            });
-
-            results.sort((a, b) => b.score - a.score);
-
-            return results.slice(0, this.maxResults);
+        async searchByName(searchTerm) {
+            try {
+                const response = await fetch(`/api/movies?action=search&keyword=${encodeURIComponent(searchTerm)}&limit=${this.maxResults}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                const movies = await response.json();
+                
+                return movies.map(movie => ({
+                    id: movie.id,
+                    movie: {
+                        id: movie.id,
+                        poster: movie.posterUrl,
+                        titles: {
+                            zh: movie.titleZh,
+                            intl: movie.titleIntl
+                        },
+                        year: movie.year,
+                        scores: {
+                            douban: {
+                                value: movie.doubanScore,
+                                url: movie.doubanUrl
+                            },
+                            imdb: {
+                                value: movie.imdbScore,
+                                url: movie.imdbUrl
+                            }
+                        },
+                        info: {
+                            director: movie.director,
+                            writers: movie.writers,
+                            actors: movie.actors,
+                            genres: movie.genres,
+                            country: movie.country,
+                            language: movie.language,
+                            release: movie.releaseDate,
+                            duration: movie.duration
+                        },
+                        intro: movie.intro
+                    },
+                    score: 100
+                }));
+            } catch (error) {
+                console.error('搜索失败:', error);
+                return [];
+            }
         },
 
         displayResults(results) {
@@ -975,7 +985,6 @@ document.addEventListener('DOMContentLoaded', function() {
         },
 
         handleResultClick(movieId) {
-            // 清空搜索框文字
             this.elements.searchInput.value = '';
             
             if (movieModalModule) {
@@ -1156,21 +1165,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 初始化所有模块
     console.log('初始化Lmovie模块...');
 
-    if (typeof carouselData !== 'undefined') {
-        carouselModule.init(carouselData);
-    }
-
-    const combinedDatabase = {
-        ...(typeof movieDatabase !== 'undefined' ? movieDatabase : {}),
-        ...(typeof tvDramaDatabase !== 'undefined' ? tvDramaDatabase : {}),
-        ...(typeof animatDatabase !== 'undefined' ? animatDatabase : {})
-    };
-
-    if (Object.keys(combinedDatabase).length > 0) {
-        movieModalModule.init(combinedDatabase);
-        searchModule.init(combinedDatabase);
-    }
-
     themeManagerModule.init();
     pageNavigationModule.init();
     dynamicContentModule.init();
@@ -1179,5 +1173,22 @@ document.addEventListener('DOMContentLoaded', function() {
     backToTopModule.init();
     footerAdditionalModule.init();
 
+    if (typeof carouselData !== 'undefined') {
+        carouselModule.init(carouselData);
+    }
+
+    movieModalModule.init(); 
+    searchModule.init();
+
     console.log('所有模块初始化完成！');
+
+    window.addEventListener('load', function() {
+        if (pageNavigationModule.currentPage === 'movie' || 
+            pageNavigationModule.currentPage === 'tvDrama' || 
+            pageNavigationModule.currentPage === 'animat') {
+            setTimeout(() => {
+                dynamicContentModule.onPageChange(pageNavigationModule.currentPage);
+            }, 500);
+        }
+    })
 });
