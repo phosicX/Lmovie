@@ -1,21 +1,26 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<%--
+  Created by IntelliJ IDEA.
+  User: 31814
+  Date: 2025/12/31
+  Time: 14:57
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Title</title>
     <style>
         body {
             display: grid;
             place-items: center;
             min-height: 100vh;
         }
-        
-        .container { 
+
+        .container {
             position: relative;
             width: 750px;
             height: 450px;
-            overflow: hidden; 
+            overflow: hidden;
             box-shadow: var(--shadow-lg) var(--shadow-color);
         }
 
@@ -101,7 +106,7 @@
         .register-form.selected { transform: translateX(-250px);}
 
         .login-prompt, .register-prompt {
-            display: block; 
+            display: block;
             margin: 30px 0 70px;
         }
 
@@ -197,7 +202,7 @@
 
         .poster {
             width: 100px;
-            height: 150px;    
+            height: 150px;
         }
 
         .poster img {
@@ -235,6 +240,7 @@
         }
 
     </style>
+
     <link rel="stylesheet" href="CSS/globalVar.css">
     <script src="JS/Main.js"></script>
 </head>
@@ -243,10 +249,10 @@
         <!-- 登录 -->
         <section class="login-page" id="loginPage">
             <div class="login-welcome">
-                <h2>欢迎回来!</h2> 
+                <h2>欢迎回来!</h2>
                 <span class="no-account">还没有账户？
-                    <button id="toRegisterPage" type="button"><strong>立即注册</strong></button>
-                </span>
+                        <button id="toRegisterPage" type="button"><strong>立即注册</strong></button>
+                    </span>
                 <!-- <div class="user-info">
                     <img src="Image/welcome/default-user.svg" alt="" class="user-avatar">
                     <span class="username">phosicX</span>
@@ -271,15 +277,15 @@
                     <a href="" class="forgot-pwd">忘记密码？</a>
                 </div>
                 <button class="login-btn" type="submit" id="loginSubmitBtn">登录</button>
-            </form> 
+            </form>
         </section>
         <!-- 注册 -->
         <section class="register-page" id="registerPage">
             <div class="register-welcome">
                 <h2>欢迎加入!</h2>
                 <span class="has-account">已有账户？
-                    <button id="toLoginPage"><strong>立即登录</strong></button>
-                </span>
+                        <button id="toLoginPage"><strong>立即登录</strong></button>
+                    </span>
             </div>
             <form action="" class="register-form" id="registerForm">
                 <h2>请创建您的账户</h2>
@@ -289,11 +295,11 @@
                     <label for="email-register" class="input-label">邮箱: </label>
                 </div>
                 <div class="form-group">
-                    <input type="text" id="nickname" class="form-input"> 
+                    <input type="text" id="nickname" class="form-input">
                     <label for="nickname" class="input-label">昵称: </label>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="pwd-register" class="form-input" required>  
+                    <input type="password" id="pwd-register" class="form-input" required>
                     <label for="pwd-register" class="input-label">密码: </label>
                 </div>
                 <div class="form-group">
@@ -341,12 +347,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const floatingInputs = document.querySelectorAll('.form-input');
-            
+
             floatingInputs.forEach(input => {
                 if (input.value) {
                     input.classList.add('filled');
                 }
-                
+
                 input.addEventListener('input', function() {
                     if (this.value) {
                         this.classList.add('filled');
@@ -354,11 +360,11 @@
                         this.classList.remove('filled');
                     }
                 });
-                
+
                 input.addEventListener('focus', function() {
                     this.classList.add('focused');
                 });
-                
+
                 input.addEventListener('blur', function() {
                     this.classList.remove('focused');
                     if (!this.value) {
@@ -415,7 +421,7 @@
 
             initWelcomePage();
 
-            const loginSubmitBtn = document.getElementById('loginSubmitBtn');         
+            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
             const loginPrompt = document.getElementById('loginPrompt');
 
             loginForm.addEventListener('submit', async function (e) {
@@ -556,7 +562,7 @@
                     button.textContent = button.id === 'loginSubmitBtn' ? '登录' : '注册';
                 }
             }
-        })  
+        })
     </script>
 </body>
 </html>

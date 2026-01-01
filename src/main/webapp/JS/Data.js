@@ -60,7 +60,7 @@ const mediaDataManager = {
     async loadMoreItems(pageType, loadType = 'more') {
         const state = this.currentState[pageType];
         const loadCount = loadType === 'initial' 
-            ? this.pageConfig.initial 
+            ? this.pageConfig.initial
             : this.pageConfig.more;
         
         if (state.loadedItems >= state.allItems && state.allItems > 0) {

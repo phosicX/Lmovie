@@ -18,6 +18,8 @@
     --shadow-hover: 0 0 50px;
 
     --indicator-color: #227af5;
+    --success-color: #00C851;
+    --error-color: #ff4444;
 }
 
 :root {
@@ -121,19 +123,19 @@ p, li {
 
 /* svg-filter */
 .douban-link, .github-link, .imdb-link, .lang-icon, .load-more, .moon-icon, .nav-bar li::before,
- .nav-side, .search-icon, .setting-btn, .side-setting img, .star-icon, .sun-icon {
+.nav-side, .search-icon, .star-icon, .sun-icon {
     filter: var(--svg-filter);
     transition: var(--transition);
 }
 
 /* btn-hover */
-.detail-btn:hover, .modal-close-btn:hover, .modal .douban:hover, .modal .imdb:hover, .nav-bar li:hover,
- .recent-prev:hover, .recent-next:hover, .search-result-item:hover {
+.detail-btn:hover, .login-btn:hover, .modal-close-btn:hover, .modal .douban:hover, .modal .imdb:hover,
+.nav-bar li:hover,.recent-prev:hover, .recent-next:hover, .register-btn:hover, .search-result-item:hover {
     box-shadow: inset var(--shadow-hover) var(--shadow-color), 0 0 0 var(--bg-color);
 }
 
 /* btn-active */
-.detail-btn:active, .modal-close-btn:active, .modal .douban:active, .modal .imdb:active,
- .recent-prev:active, .recent-next:active {
+.detail-btn:active, .login-btn:active, .modal-close-btn:active, .modal .douban:active, .modal .imdb:active,
+.recent-prev:active, .recent-next:active, .register-btn:active {
     border-color: var(--border-color);
 }

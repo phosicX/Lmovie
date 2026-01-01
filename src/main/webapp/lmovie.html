@@ -16,6 +16,7 @@
 <body>
     <header class="top-bar">
         <div class="top-panel">
+            <!-- 搜索 -->
             <div class="search">
                 <div class="search-container">
                     <label for="searchInput" class="search-icon bg-util" title="搜索"></label>
@@ -23,7 +24,18 @@
                 </div>
                 <div class="search-out"></div>
             </div>
+            <!-- 控制台 -->
             <div class="console">
+                <div class="user-console" id="userConsole">
+                    <img src="Image/main/default-user.svg" alt="用户头像" class="user-avatar">
+                    <div class="user-operate">
+                        <button class="user-setting" id="userSetting" type="button">用户设置</button>
+                        <button class="logout" id="logout" type="button">退出登录</button>
+                    </div>
+                </div>
+                <div class="login-prompt" id="loginPrompt">
+                    <span>请先&nbsp;<a href="welcome.jsp"><strong>登录</strong></a></span>
+                </div>
                 <div class="theme-switch-wrapper">
                     <div class="sun-icon bg-util"></div>
                     <label class="theme-switch" title="切换主题" aria-label="切换深色和浅色主题">
@@ -35,7 +47,6 @@
                         <div class="star-icon bg-util"></div>
                     </div>
                 </div>
-                <button class="setting-btn bg-util" id="settingBtn" type="button" title="设置" aria-label="设置按钮"></button>
             </div> 
         </div>
         <nav class="nav-bar">
@@ -58,12 +69,12 @@
             <!-- 轮播图 -->
             <div class="carousel">
                 <div class="carousel-inner">
-                    <!-- 轮播项将通过JavaScript动态添加 -->
+                    <!-- 通过JS动态加载 -->
                 </div>
                 <button class="carousel-control prev" type="button">&lt;</button>
                 <button class="carousel-control next" type="button">&gt;</button>
                 <div class="carousel-indicators">
-                    <!-- 指示器将通过JavaScript动态添加 -->
+                    <!-- 通过JS动态加载 -->
                 </div>
             </div>
             <div class="recent-hot">
@@ -525,9 +536,6 @@
 
     <aside class="side-widget">
         <button class="back-to-top" type="button" id="backToTop" title="返回顶部" aria-label="返回顶部控件">↑</button>
-        <button class="side-setting" id="sideSettingBtn" type="button">
-            <img src="Image/naviBar/setting.svg" alt="setting" title="设置" aria-label="设置">
-        </button>
     </aside>
 
     <footer class="bottom-bar">
@@ -552,4 +560,73 @@
         <span class="copyright">&copy; 2025 phosicX</span>
     </footer> 
 </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userConsole = document.getElementById('userConsole');
+            const loginPrompt = document.getElementById('loginPrompt');
+            const logoutBtn = document.getElementById('logout');
+            
+            checkLoginStatus();
+            
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    logout();
+                });
+            }
+            
+            async function checkLoginStatus() {
+                try {
+                    const response = await fetch('/api/auth/check');
+                    const result = await response.json();
+                    
+                    if (result.isLoggedIn) {
+                        if (userConsole) userConsole.classList.remove('hidden');
+                        if (loginPrompt) loginPrompt.classList.add('hidden');
+                        
+                        console.log('用户已登录:', result.user);
+                    } else {
+                        if (userConsole) userConsole.classList.add('hidden');
+                        if (loginPrompt) loginPrompt.classList.remove('hidden');
+                        
+                        if (!window.location.href.includes('welcome')) {
+                            setTimeout(() => {
+                                window.location.href = 'welcome.jsp';
+                            }, 1000);
+                        }
+                    }
+                } catch (error) {
+                    console.error('检查登录状态失败:', error);
+                    if (userConsole) userConsole.classList.add('hidden');
+                    if (loginPrompt) loginPrompt.classList.remove('hidden');
+                }
+            }
+            
+            async function logout() {
+                try {
+                    const response = await fetch('/api/auth/logout', {
+                        method: 'POST'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        window.location.href = result.redirect;
+                    } else {
+                        alert('退出登录失败: ' + (result.message || '未知错误'));
+                    }
+                } catch (error) {
+                    console.error('退出登录失败:', error);
+                    alert('退出登录失败，请重试');
+                }
+            }
+            
+            const originalShowPage = window.pageNavigationModule?.showPage;
+            if (originalShowPage) {
+                window.pageNavigationModule.showPage = function(pageKey) {
+                    originalShowPage.call(this, pageKey);
+                    setTimeout(checkLoginStatus, 100);
+                };
+            }
+        });
+    </script>
 </html>
