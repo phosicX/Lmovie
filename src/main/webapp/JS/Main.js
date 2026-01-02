@@ -1162,6 +1162,103 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    // 用户认证模块
+    const authModule = {
+        elements: {
+            userConsole: null,
+            loginPrompt: null,
+            logoutBtn: null
+        },
+
+        init() {
+            this.elements.userConsole = document.getElementById('userConsole');
+            this.elements.loginPrompt = document.getElementById('loginPrompt');
+            this.elements.logoutBtn = document.getElementById('logout');
+
+            if (!this.elements.userConsole || !this.elements.loginPrompt) {
+                console.warn('用户认证相关的DOM元素未找到');
+                return;
+            }
+
+            this.bindEvents();
+            this.checkLoginStatus();
+            this.bindPageChangeListener();
+        },
+
+        bindEvents() {
+            if (this.elements.logoutBtn) {
+                this.elements.logoutBtn.addEventListener('click', () => {
+                    this.logout();
+                });
+            }
+        },
+
+        bindPageChangeListener() {
+            const originalShowPage = pageNavigationModule.showPage.bind(pageNavigationModule);
+            
+            pageNavigationModule.showPage = function(pageKey) {
+                originalShowPage(pageKey);
+                
+                setTimeout(() => {
+                    authModule.checkLoginStatus();
+                }, 100);
+            };
+        },
+
+        async checkLoginStatus() {
+            try {
+                const response = await fetch('/api/auth/check');
+                const result = await response.json();
+                
+                if (result.isLoggedIn) {
+                    if (this.elements.userConsole) this.elements.userConsole.classList.remove('hidden');
+                    if (this.elements.loginPrompt) this.elements.loginPrompt.classList.add('hidden');
+                    
+                    console.log('用户已登录:', result.user);
+                    
+                    if (result.user && result.user.avatar) {
+                        const avatarImg = this.elements.userConsole.querySelector('.user-avatar');
+                        if (avatarImg) {
+                            avatarImg.src = result.user.avatar;
+                        }
+                    }
+                } else {
+                    if (this.elements.userConsole) this.elements.userConsole.classList.add('hidden');
+                    if (this.elements.loginPrompt) this.elements.loginPrompt.classList.remove('hidden');
+                    
+                    if (!window.location.href.includes('welcome')) {
+                        setTimeout(() => {
+                            window.location.href = 'welcome.jsp';
+                        }, 1000);
+                    }
+                }
+            } catch (error) {
+                console.error('检查登录状态失败:', error);
+                if (this.elements.userConsole) this.elements.userConsole.classList.add('hidden');
+                if (this.elements.loginPrompt) this.elements.loginPrompt.classList.remove('hidden');
+            }
+        },
+
+        async logout() {
+            try {
+                const response = await fetch('/api/auth/logout', {
+                    method: 'POST'
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.location.href = result.redirect;
+                } else {
+                    alert('退出登录失败: ' + (result.message || '未知错误'));
+                }
+            } catch (error) {
+                console.error('退出登录失败:', error);
+                alert('退出登录失败，请重试');
+            }
+        }
+    };
+
     // 初始化所有模块
     console.log('初始化Lmovie模块...');
 
@@ -1179,6 +1276,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     movieModalModule.init(); 
     searchModule.init();
+    authModule.init();
 
     console.log('所有模块初始化完成！');
 

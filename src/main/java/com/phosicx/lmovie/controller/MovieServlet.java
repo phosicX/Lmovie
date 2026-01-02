@@ -1,6 +1,5 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.controller;
 
-import java.io.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.phosicx.lmovie.model.Movie;
+import com.phosicx.lmovie.dao.MovieDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.WebServlet;

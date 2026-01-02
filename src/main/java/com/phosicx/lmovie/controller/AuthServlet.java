@@ -1,4 +1,4 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.google.gson.Gson;
+import com.phosicx.lmovie.util.PasswordUtil;
+import com.phosicx.lmovie.model.User;
+import com.phosicx.lmovie.dao.UserDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.WebServlet;
@@ -139,9 +142,9 @@ public class AuthServlet extends HttpServlet {
         }
 
         // 登录验证
-        User user = userDAO.login(email, password);
+        User user = userDAO.getUserByEmail(email);
 
-        if (user != null) {
+        if (user != null && PasswordUtil.checkPassword(password, user.getPassword_hash())) {
             HttpSession session = request.getSession(true);
             session.setAttribute("userId", user.getId());
             session.setAttribute("userEmail", user.getEmail());
@@ -149,10 +152,15 @@ public class AuthServlet extends HttpServlet {
 
             session.setMaxInactiveInterval(30 * 60);
 
+            User safeUser = new User();
+            safeUser.setId(user.getId());
+            safeUser.setEmail(user.getEmail());
+            safeUser.setNickname(user.getNickname());
+            safeUser.setAvatar_url(user.getAvatar_url());
+
             result.put("success", true);
             result.put("message", "登录成功");
-            result.put("user", user);
-
+            result.put("user", safeUser);
             result.put("redirect", "lmovie.html");
         } else {
             result.put("success", false);
@@ -224,7 +232,9 @@ public class AuthServlet extends HttpServlet {
         User user = new User();
         user.setEmail(email);
         user.setNickname(nickname);
-        user.setPassword_hash(password); // 实际项目中应该加密
+
+        String hashedPassword = PasswordUtil.hashPassword(password);
+        user.setPassword_hash(hashedPassword);
 
         boolean success = userDAO.registerUser(user);
 

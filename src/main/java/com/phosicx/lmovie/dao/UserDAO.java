@@ -1,4 +1,7 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.dao;
+
+import com.phosicx.lmovie.util.DbUtil;
+import com.phosicx.lmovie.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +22,7 @@ public class UserDAO {
 
             int rowsAffected = pstmt.executeUpdate();
             System.out.println("插入用户成功，影响行数: " + rowsAffected);
+            System.out.println("用户邮箱: " + user.getEmail());
             return rowsAffected > 0;
 
         } catch (SQLException e) {
@@ -27,23 +31,6 @@ public class UserDAO {
             System.err.println("错误码: " + e.getErrorCode());
             throw e;
         }
-    }
-
-    public User login(String email, String password) throws SQLException {
-        String sql = "SELECT * FROM user WHERE email = ? AND password_hash = ?";
-
-        try (Connection conn = DbUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, email);
-            pstmt.setString(2, password);
-
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return resultSetToUser(rs);
-            }
-        }
-        return null;
     }
 
     public boolean isEmailExists(String email) throws SQLException {
@@ -69,6 +56,22 @@ public class UserDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return resultSetToUser(rs);
+            }
+        }
+        return null;
+    }
+
+    public User getUserByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM user WHERE email = ?";
+
+        try (Connection conn = DbUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {

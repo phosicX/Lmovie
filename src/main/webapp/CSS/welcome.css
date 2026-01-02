@@ -1,0 +1,230 @@
+body {
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    overflow: hidden;
+    transition: var(--transition);
+    box-shadow: var(--shadow-lg) var(--shadow-color);
+}
+
+.login-page, .register-page {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    background: rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.login-welcome, .register-welcome {
+    width: 250px;
+    box-shadow: var(--shadow-sm) var(--shadow-color);
+    padding: 40px 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    background: var(--bg-color);
+    z-index: 1;
+}
+
+.register-welcome { transform: translateX(0);}
+.login-welcome { transform: translateX(500px);}
+
+.register-welcome.selected {
+    transition: var(--transition);
+    transform: translateX(500px);
+}
+
+.login-welcome.selected {
+    transition: var(--transition);
+    transform: translateX(0);
+}
+
+.user-info {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-40%);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+}
+
+.username {
+    display: block;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.no-account, .has-account { margin-bottom: 20px;}
+
+.no-account strong, .has-account strong { font-size: 16px;}
+
+.login-form, .register-form {
+    padding: 40px 0;
+    width: 500px;
+    transition: var(--transition-slow);
+}
+
+.login-form { transform: translateX(-250px);}
+.register-form { transform: translateX(0);}
+
+.login-form.selected { transform: translateX(0);}
+.register-form.selected { transform: translateX(-250px);}
+
+.login-prompt, .register-prompt {
+    display: block;
+    margin: 30px 0 70px;
+}
+
+.register-prompt { margin: 30px 0 40px;}
+
+.form-group {
+    width: 300px;
+    position: relative;
+    margin: 15px auto;
+}
+
+.form-group label {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    font-size: 14px;
+    transform: translateY(-50%);
+    transition: var(--transition);
+}
+
+.form-group label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    bottom: 35%;
+    left: -10%;
+    right: -10%;
+    background: var(--bg-color);
+    transition: var(--transition);
+    z-index: -1;
+}
+
+.form-input {
+    width: 100%;
+    padding: 6px 10px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: var(--transition);
+    outline: none;
+}
+
+.form-input:focus + .input-label,
+.form-input.filled + .input-label {
+    transform: translateY(-150%);
+    font-size: 13px;
+}
+
+.option-group {
+    width: 300px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.remember-me input { cursor: pointer;}
+
+.login-btn, .register-btn {
+    margin-top: 10px;
+    font-size: 16px;
+    padding: 5px 0;
+    width: 240px;
+    border: 2px solid var(--btn-border);
+    background: var(--btn-color);
+}
+
+.poster-exhibit {
+    position: absolute;
+    top: -25%;
+    left: -20%;
+    right: -20%;
+    bottom: -20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 10px;
+    transform: rotateZ(-20deg);
+    z-index: -1;
+    animation: rollingPoster 60s linear infinite;
+    opacity: 0.25;
+}
+
+.poster {
+    width: 100px;
+    height: 150px;
+}
+
+.poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--btn-color);
+    border-top: 2px solid var(--indicator-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes rollingPoster {
+    0%, 100% { transform: translateX(0px) rotateZ(-20deg);}
+    25% { transform: translateX(-50px) rotateZ(-20deg);}
+    75% { transform: translateX(50px) rotateZ(-20deg);}
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

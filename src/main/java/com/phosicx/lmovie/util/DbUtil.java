@@ -1,4 +1,4 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.util;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

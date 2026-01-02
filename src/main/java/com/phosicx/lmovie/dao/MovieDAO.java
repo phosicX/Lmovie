@@ -1,4 +1,7 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.dao;
+
+import com.phosicx.lmovie.util.DbUtil;
+import com.phosicx.lmovie.model.Movie;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

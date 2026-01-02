@@ -1,4 +1,4 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;

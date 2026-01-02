@@ -1,4 +1,4 @@
-package com.phosicx.lmovie;
+package com.phosicx.lmovie.model;
 
 import java.io.Serializable;
 
