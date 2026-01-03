@@ -1,0 +1,9 @@
+CREATE TABLE USER (
+	id int PRIMARY KEY AUTO_INCREMENT,
+	email varchar(50) UNIQUE NOT NULL,
+	nickname varchar(50) DEFAULT NULL,
+	password_hash varchar(255) NOT NULL,
+	avatar_url varchar(200) DEFAULT NULL,
+	created_at timestamp DEFAULT CURRENT_TIMESTAMP(),
+	updated_at timestamp DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+);

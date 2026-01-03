@@ -1167,19 +1167,24 @@ document.addEventListener('DOMContentLoaded', function() {
         elements: {
             userConsole: null,
             loginPrompt: null,
-            logoutBtn: null
+            logoutBtn: null,
+            userAvatar: null,
+            username: null,
         },
 
         init() {
             this.elements.userConsole = document.getElementById('userConsole');
             this.elements.loginPrompt = document.getElementById('loginPrompt');
             this.elements.logoutBtn = document.getElementById('logout');
+            this.elements.userAvatar = document.getElementById('userAvatar');
+            this.elements.username = document.getElementById('username');
 
             if (!this.elements.userConsole || !this.elements.loginPrompt) {
                 console.warn('用户认证相关的DOM元素未找到');
                 return;
             }
 
+            console.log('用户认证模块初始化完成');
             this.bindEvents();
             this.checkLoginStatus();
             this.bindPageChangeListener();
@@ -1216,13 +1221,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     console.log('用户已登录:', result.user);
                     
-                    if (result.user && result.user.avatar) {
-                        const avatarImg = this.elements.userConsole.querySelector('.user-avatar');
-                        if (avatarImg) {
-                            avatarImg.src = result.user.avatar;
-                        }
+                    if (this.elements.userConsole) {
+                        this.elements.userConsole.classList.remove('hidden');
                     }
+                    if (this.elements.loginPrompt) {
+                        this.elements.loginPrompt.classList.add('hidden');
+                    }
+                    
+                    this.updateUserInfo(result.user);
                 } else {
+                    console.log('用户未登录或登录信息不完整');
+
                     if (this.elements.userConsole) this.elements.userConsole.classList.add('hidden');
                     if (this.elements.loginPrompt) this.elements.loginPrompt.classList.remove('hidden');
                     
@@ -1237,6 +1246,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (this.elements.userConsole) this.elements.userConsole.classList.add('hidden');
                 if (this.elements.loginPrompt) this.elements.loginPrompt.classList.remove('hidden');
             }
+        },
+
+        updateUserInfo(user) {
+            if (this.elements.userAvatar) {
+                const avatarUrl = user.avatar || 'Image/main/default-user.svg';
+                console.log('设置头像URL:', avatarUrl);
+                this.elements.userAvatar.src = avatarUrl;
+                this.elements.userAvatar.alt = user.nickname || user.email || '用户';
+            } else {
+                console.warn('未找到userAvatar元素');
+            }
+            
+            if (this.elements.username) {
+                const userName = user.nickname || user.email || '未知用户';
+                console.log('设置用户名:', userName);
+                this.elements.username.textContent = userName;
+            } else {
+                console.warn('未找到username元素');
+            }
+            
+            console.log('用户信息更新完成');
         },
 
         async logout() {

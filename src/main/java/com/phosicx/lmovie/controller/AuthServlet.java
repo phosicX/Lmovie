@@ -26,7 +26,6 @@ public class AuthServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // TODO: 在这里添加GET请求处理逻辑
 
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -44,8 +43,26 @@ public class AuthServlet extends HttpServlet {
                     int userId = (int) session.getAttribute("userId");
                     User user = userDAO.getUserById(userId);
 
-                    result.put("isLoggedIn", true);
-                    result.put("user", user);
+                    if (user != null) {
+                        // 获取用户头像URL，如果为空则使用默认头像
+                        String avatarUrl = user.getAvatar_url();
+                        if (avatarUrl == null || avatarUrl.trim().isEmpty()) {
+                            avatarUrl = "Image/main/default-user.svg"; // lmovie页面的默认头像路径
+                        }
+
+                        // 构建返回的用户信息
+                        Map<String, Object> userInfo = new HashMap<>();
+                        userInfo.put("id", user.getId());
+                        userInfo.put("email", user.getEmail());
+                        userInfo.put("nickname", user.getNickname());
+                        userInfo.put("avatar", avatarUrl); // 注意字段名是avatar，不是avatar_url
+
+                        result.put("isLoggedIn", true);
+                        result.put("user", userInfo);
+                    } else {
+                        result.put("isLoggedIn", false);
+                        result.put("message", "用户不存在");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     result.put("isLoggedIn", false);
@@ -150,18 +167,27 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("userEmail", user.getEmail());
             session.setAttribute("userNickname", user.getNickname());
 
+            String avatarUrl = user.getAvatar_url();
+            if (avatarUrl == null || avatarUrl.trim().isEmpty()) {
+                avatarUrl = "Image/welcome/default-user.svg";
+            }
+            session.setAttribute("userAvatar", avatarUrl);
+
             session.setMaxInactiveInterval(30 * 60);
 
-            User safeUser = new User();
-            safeUser.setId(user.getId());
-            safeUser.setEmail(user.getEmail());
-            safeUser.setNickname(user.getNickname());
-            safeUser.setAvatar_url(user.getAvatar_url());
+            Map<String, Object> safeUser = new HashMap<>();
+            safeUser.put("id", user.getId());
+            safeUser.put("email", user.getEmail());
+            safeUser.put("nickname", user.getNickname());
+            safeUser.put("avatar_url", avatarUrl);
 
             result.put("success", true);
             result.put("message", "登录成功");
             result.put("user", safeUser);
+            result.put("avatarUrl", avatarUrl);
             result.put("redirect", "lmovie.html");
+
+            result.put("redirectDelay", 1000);   // 跳转延迟
         } else {
             result.put("success", false);
             result.put("message", "邮箱或密码错误");

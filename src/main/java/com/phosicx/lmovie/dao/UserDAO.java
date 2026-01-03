@@ -81,6 +81,26 @@ public class UserDAO {
         return null;
     }
 
+    public String getUserAvatarUrl(int userId) throws SQLException {
+        String sql = "SELECT avatar_url FROM user WHERE id = ?";
+
+        try (Connection conn = DbUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                String avatarUrl = rs.getString("avatar_url");
+                // 如果头像URL为空，返回默认头像路径
+                return (avatarUrl == null || avatarUrl.trim().isEmpty())
+                        ? "Image/welcome/default-user.svg"
+                        : avatarUrl;
+            }
+        }
+        return "Image/welcome/default-user.svg";
+    }
+
     public boolean updateUser(User user) throws SQLException {
         String sql = "UPDATE user SET nickname = ?, avatar_url = ? WHERE id = ?";
 

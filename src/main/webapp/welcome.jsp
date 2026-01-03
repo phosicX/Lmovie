@@ -23,12 +23,12 @@
             <div class="login-welcome">
                 <h2>欢迎回来!</h2>
                 <span class="no-account">还没有账户？
-                        <button id="toRegisterPage" type="button"><strong>立即注册</strong></button>
-                    </span>
-                <!-- <div class="user-info">
-                    <img src="Image/welcome/default-user.svg" alt="" class="user-avatar">
-                    <span class="username">phosicX</span>
-                </div> -->
+                    <button id="toRegisterPage" type="button"><strong>立即注册</strong></button>
+                </span>
+                <div class="user-info hidden" id="userInfo">
+                    <img src="Image/welcome/default-user.svg" alt="" class="user-avatar" id="userAvatar">
+                    <span class="username" id="username">unKnown</span>
+                </div>
             </div>
             <form action="" class="login-form" id="loginForm">
                 <h2>登录您的账户</h2>

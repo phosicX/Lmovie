@@ -18,7 +18,10 @@ document.addEventListener("DOMContentLoaded", function() {
         emailRegister: document.getElementById('email-register'),
         nickname: document.getElementById('nickname'),
         pwdRegister: document.getElementById('pwd-register'),
-        pwdRegisterConfirm: document.getElementById('pwd-register-confirm')
+        pwdRegisterConfirm: document.getElementById('pwd-register-confirm'),
+        userInfo: document.getElementById('userInfo'),
+        userAvatar: document.getElementById('userAvatar'),
+        username: document.getElementById('username'),
     };
 
     // API 路径常量
@@ -170,9 +173,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
             if (result.success) {
                 showPrompt(DOM.loginPrompt, '登录成功!', 'success');
+
+                if (result.user && DOM.userInfo) {
+                    DOM.userInfo.classList.remove('hidden');
+                    DOM.userAvatar.src = result.avatarUrl;
+                    if (result.user.nickname) {
+                        DOM.username.textContent = result.user.nickname;
+                    } else {
+                        DOM.username.textContent = result.user.email;
+                    }
+                }
+
+                const redirectDelay = result.redirectDelay || 1000;      // 跳转延迟，默认取服务端数据
+
                 setTimeout(() => {
                     window.location.href = result.redirect || '/';
-                }, 500);
+                }, redirectDelay);
             } else {
                 showPrompt(DOM.loginPrompt, result.message || '登录失败，请检查邮箱和密码');
             }
@@ -290,13 +306,17 @@ document.addEventListener("DOMContentLoaded", function() {
         themeManager.init();
         initFloatingLabels();
         bindEvents();
-        switchPage(true); // 默认显示登录页面
+        switchPage(true);   // 默认显示登录页面
 
         // 检查是否有记住的邮箱
         const rememberedEmail = localStorage.getItem('rememberedEmail');
         if (rememberedEmail) {
             DOM.emailLogin.value = rememberedEmail;
             document.querySelector('.form-input.filled')?.classList.add('filled');
+        }
+
+        if (DOM.userInfo) {
+            DOM.userInfo.classList.add('hidden');
         }
     }
 

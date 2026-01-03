@@ -21,7 +21,7 @@ public class DbUtil {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl("jdbc:mysql://localhost:3306/lmovie_db?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false");
             config.setUsername("root");
-            config.setPassword("xuan060225");
+            config.setPassword("");
             config.setMaximumPoolSize(10);
             config.setMinimumIdle(2);
             config.setConnectionTimeout(30000);
